@@ -1,5 +1,5 @@
 <?php
-
+use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\AdminDashboardController;
@@ -32,13 +32,23 @@ Route::inertia('/partnershipregistration', 'partnershipregistration')->name('par
 Route::inertia('/refundpolicy', 'refundpolicy')->name('refundpolicy');
 Route::get('/ServiceUpgrade', [WebsiteController::class, 'serviceUpgrade'])
     ->name('ServiceUpgrade');
+    Route::get(
+    '/service-upgrade/{service}/{category}/{subcategory?}',
+    [WebsiteController::class, 'serviceUpgrade']
+)->name('service.upgrade');
 Route::post('/service-orders/store', [ServiceOrderController::class, 'store'])
     ->name('service.orders.store');
 //     Route::post(
 //     '/service/orders',
 //     [ServiceOrderController::class,'store']
 // )->name('service.orders.store');
+Route::middleware(['auth'])->group(function () {
+Route::inertia('/payments', 'Payments/Index')->name('payments');
+    Route::get('/documents', function () {
+        return Inertia::render('Documents/Index');
+    })->name('documents');
 
+});
 // ====================== USER ======================
 
 Route::middleware(['auth', 'verified'])->group(function () {

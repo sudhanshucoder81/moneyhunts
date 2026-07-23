@@ -36,63 +36,39 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
 
-    {
-        title: "Services",
-        href: "/admin/services",
+   {
+        title: "Apply Service",
+        href: "/ServiceUpgrade",
         icon: Briefcase,
     },
-
     {
-        title: "Categories",
-        href: "/admin/categories",
-        icon: FolderTree,
-    },
-
-    {
-        title: "Sub Categories",
-        href: "/admin/sub-categories",
-        icon: ListTree,
-    },
-
-    {
-        title: "Documents",
-        href: "/admin/documents",
-        icon: FileText,
-    },
-
-    {
-        title: "Pricing",
-        href: "/admin/pricing",
-        icon: IndianRupee,
-    },
-
-    {
-        title: "Users",
-        href: "/admin/users",
-        icon: Users,
-    },
-
-    {
-        title: "Service Requests",
-        href: "/admin/requests",
+        title: "My Orders",
+        href: "/my-orders",
         icon: ClipboardList,
     },
-
     {
         title: "Payments",
-        href: "/admin/payments",
+        href: "/payments",
         icon: CreditCard,
     },
-
     {
-        title: "Reports",
-        href: "/admin/reports",
-        icon: BarChart3,
+        title: "My Documents",
+        href: "/documents",
+        icon: FileText,
     },
-
+    {
+        title: "Wallet",
+        href: "/wallet",
+        icon: IndianRupee,
+    },
+    {
+        title: "Profile",
+        href: "/profile",
+        icon: Users,
+    },
     {
         title: "Settings",
-        href: "/admin/settings",
+        href: "/settings",
         icon: Settings,
     },
 ];

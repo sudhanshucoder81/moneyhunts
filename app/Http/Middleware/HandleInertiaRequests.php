@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
-
+use App\Models\Service;
 class HandleInertiaRequests extends Middleware
 {
     /**
@@ -24,25 +24,38 @@ class HandleInertiaRequests extends Middleware
     /**
      * Shared data for all Inertia pages.
      */
-    public function share(Request $request): array
-    {
-        return [
-            ...parent::share($request),
+   public function share(Request $request): array
+{
+    return [
+        ...parent::share($request),
 
-            'name' => config('app.name'),
+        'name' => config('app.name'),
 
-            'auth' => [
-                'user' => Auth::guard('web')->user(),
-                'admin' => Auth::guard('admin')->user(),
-            ],
+        'auth' => [
+            'user' => Auth::guard('web')->user(),
+            'admin' => Auth::guard('admin')->user(),
+        ],
 
-            'sidebarOpen' => ! $request->hasCookie('sidebar_state')
-                || $request->cookie('sidebar_state') === 'true',
+        'sidebarOpen' => ! $request->hasCookie('sidebar_state')
+            || $request->cookie('sidebar_state') === 'true',
 
-                'flash' => [
-    'success' => $request->session()->get('success'),
-    'error' => $request->session()->get('error'),
-],
-        ];
-    }
+        'flash' => [
+            'success' => $request->session()->get('success'),
+            'error' => $request->session()->get('error'),
+        ],
+
+        'services' => Service::with([
+            'categories' => function ($query) {
+                $query->where('status', 1)
+                    ->with([
+                        'subCategories' => function ($q) {
+                            $q->where('status', 1);
+                        }
+                    ]);
+            }
+        ])
+        ->where('status', 1)
+        ->get(),
+    ];
+}
 }

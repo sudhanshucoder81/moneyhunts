@@ -1,43 +1,42 @@
-import { useEffect, useState } from "react";
-import "../../css/app.css";
+import { useEffect, useMemo, useState } from "react";
+import { Link, usePage } from "@inertiajs/react";
 import {
-  ChevronDown,
-  ChevronRight,
-  Menu,
-  X,
-  Search,
-  Phone,
-  Mail,
-  CreditCard,
-  GraduationCap,
+    Menu,
+    X,
+    ChevronDown,
+    ChevronRight,
+    Search,
+    Phone,
+    Mail,
+    CreditCard,
+    GraduationCap,
 } from "lucide-react";
-import { Link, usePage } from '@inertiajs/react';
 
-type MenuItem = {
-  name: string;
-  href: string;
-};
+interface SubCategory {
+    id: number;
+    name: string;
+    slug: string;
+    status: number;
+}
 
-type LicenseKey = "fssai" | "pfesic" | "other";
+interface Category {
+    id: number;
+    name: string;
+    slug: string;
+    status: number;
+    sub_categories: SubCategory[];
+}
 
-type LicenseCategory = {
-  title: string;
-  items: MenuItem[];
-};
+interface Service {
+    id: number;
+    name: string;
+    slug: string;
+    status: number;
+    categories: Category[];
+}
 
-type DesktopDropdownProps = {
-  menuName: string;
-  items: MenuItem[];
-  align?: "left" | "right";
-};
 
-type MobileAccordionProps = {
-  menuName: string;
-  items: MenuItem[];
-};
-
-export default function Header() {
-  const { auth } = usePage().props as {
+interface PageProps extends InertiaPageProps {
     auth: {
         user: {
             id: number;
@@ -45,680 +44,814 @@ export default function Header() {
             email: string;
         } | null;
     };
-};
 
-const user = auth.user;
-console.log(usePage().props);
-  const [profileOpen, setProfileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenu, setMobileMenu] = useState(false);
+    services: Service[];
+}
+export default function Header() {
 
-  const [desktopOpen, setDesktopOpen] = useState<string | null>(null);
+    const { auth, services } =
+        usePage<PageProps>().props;
 
-  // Desktop LICENSE submenu
-  const [activeLicenseMenu, setActiveLicenseMenu] =
-    useState<LicenseKey | null>(null);
+    const user = auth.user;
 
-  // Mobile states
-  const [mobileOpen, setMobileOpen] = useState<string | null>(null);
-  const [mobileLicenseOpen, setMobileLicenseOpen] =
-    useState<LicenseKey | null>(null);
+    const [mobileMenu, setMobileMenu] =
+        useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
+    const [profileOpen, setProfileOpen] =
+        useState(false);
+
+    const [desktopOpen, setDesktopOpen] =
+        useState<number | null>(null);
+
+    const [desktopCategory, setDesktopCategory] =
+        useState<number | null>(null);
+
+    const [mobileOpen, setMobileOpen] =
+        useState<number | null>(null);
+
+    const [mobileCategory, setMobileCategory] =
+        useState<number | null>(null);
+
+    const [scrolled, setScrolled] =
+        useState(false);
+
+    useEffect(() => {
+
+        const handleScroll = () => {
+
+            setScrolled(window.scrollY > 20);
+
+        };
+
+        window.addEventListener(
+            "scroll",
+            handleScroll
+        );
+
+        return () =>
+            window.removeEventListener(
+                "scroll",
+                handleScroll
+            );
+
+    }, []);
+
+    const closeMobile = () => {
+
+        setMobileMenu(false);
+
+        setMobileOpen(null);
+
+        setMobileCategory(null);
+
     };
 
-    window.addEventListener("scroll", handleScroll);
+    const activeServices = useMemo(() => {
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+        return services.filter(
+            (item) => Number(item.status) === 1
+        );
 
-  const closeMobileMenu = () => {
-    setMobileMenu(false);
-    setMobileOpen(null);
-    setMobileLicenseOpen(null);
-  };
+    }, [services]);
 
-  const startupItems: MenuItem[] = [
-    {
-      name: "Sole Proprietorship Registration",
-      href: "/ServiceUpgrade",
-    },
-    {
-      name: "Partnership Registration",
-      href: "/ServiceUpgrade",
-    },
-    {
-      name: "Private Limited Registration",
-      href: "/ServiceUpgrade",
-    },
-    {
-      name: "LLP Registration",
-      href: "/ServiceUpgrade",
-    },
-  ];
+    const DesktopDropdown = ({
+        service,
+    }: {
+        service: Service;
+    }) => {
 
-  const gstItems: MenuItem[] = [
-    { name: "GST Registration", href: "/gst-registration" },
-    { name: "GST Return Filing", href: "/gst-return-filing" },
-    { name: "GST Amendment", href: "/gst-amendment" },
-    { name: "GST Cancellation", href: "/gst-cancellation" },
-  ];
+        const opened =
+            desktopOpen === service.id;
 
-  const trademarkItems: MenuItem[] = [
-    {
-      name: "Trademark Registration",
-      href: "/trademark-registration",
-    },
-    {
-      name: "Trademark Search",
-      href: "/trademark-search",
-    },
-    {
-      name: "Trademark Objection",
-      href: "/trademark-objection",
-    },
-    {
-      name: "Trademark Renewal",
-      href: "/trademark-renewal",
-    },
-  ];
+        return (
 
-  const incomeTaxItems: MenuItem[] = [
-    {
-      name: "Income Tax Return Filing",
-      href: "/income-tax-return-filing",
-    },
-    {
-      name: "TDS Return Filing",
-      href: "/tds-return-filing",
-    },
-    {
-      name: "Tax Notice",
-      href: "/income-tax-notice",
-    },
-    {
-      name: "Tax Planning",
-      href: "/tax-planning",
-    },
-  ];
-
-  const rocItems: MenuItem[] = [
-    { name: "Annual Compliance", href: "/annual-compliance" },
-    { name: "Company Name Change", href: "/company-name-change" },
-    { name: "Director Change", href: "/director-change" },
-    { name: "Company Closure", href: "/company-closure" },
-  ];
-
-  const ngoItems: MenuItem[] = [
-    { name: "Trust Registration", href: "/trust-registration" },
-    { name: "Society Registration", href: "/society-registration" },
-    {
-      name: "Section 8 Company Registration",
-      href: "/section-8-company-registration",
-    },
-    {
-      name: "12A and 80G Registration",
-      href: "/12a-80g-registration",
-    },
-  ];
-
-  const licenseCategories: Record<LicenseKey, LicenseCategory> = {
-    fssai: {
-      title: "FSSAI",
-      items: [
-        {
-          name: "Applicability of FSSAI",
-          href: "/applicability-of-fssai",
-        },
-        {
-          name: "FSSAI Basic Registration",
-          href: "/fssai-basic-registration",
-        },
-        {
-          name: "FSSAI State License",
-          href: "/fssai-state-license",
-        },
-        {
-          name: "FSSAI Central License",
-          href: "/fssai-central-license",
-        },
-        {
-          name: "FSSAI License Renewal",
-          href: "/fssai-license-renewal",
-        },
-      ],
-    },
-
-    pfesic: {
-      title: "PF and ESIC",
-      items: [
-        {
-          name: "PF Registration",
-          href: "/pf-registration",
-        },
-        {
-          name: "PF Return Filing",
-          href: "/pf-return-filing",
-        },
-        {
-          name: "ESIC Registration",
-          href: "/esic-registration",
-        },
-        {
-          name: "ESIC Return Filing",
-          href: "/esic-return-filing",
-        },
-      ],
-    },
-
-    other: {
-      title: "OTHER BUSINESS LICENSE",
-      items: [
-        {
-          name: "IEC Code Registration",
-          href: "/iec-code-registration",
-        },
-        {
-          name: "IEC Code Renewal",
-          href: "/iec-code-renewal",
-        },
-        {
-          name: "Shop and Establishment Registration",
-          href: "/shop-establishment-registration",
-        },
-        {
-          name: "Trade License",
-          href: "/trade-license",
-        },
-        {
-          name: "GeM Registration",
-          href: "/gem-registration",
-        },
-      ],
-    },
-  };
-
-  const DesktopDropdown = ({
-    menuName,
-    items,
-    align = "left",
-  }: DesktopDropdownProps) => {
-    const isOpen = desktopOpen === menuName;
-
-    return (
-      <div
-        className="relative"
-        onMouseEnter={() => setDesktopOpen(menuName)}
-        onMouseLeave={() => setDesktopOpen(null)}
-      >
-        <button
-          type="button"
-          className="flex items-center gap-1 whitespace-nowrap text-[14px] font-semibold text-[#172c73] transition hover:text-[#c69000] xl:text-[15px]"
-        >
-          {menuName}
-          <ChevronDown size={16} />
-        </button>
-
-        <div
-          className={`absolute top-full z-[999] pt-4 transition-all duration-200 ${
-            align === "right" ? "right-0" : "left-0"
-          } ${
-            isOpen
-              ? "visible translate-y-0 opacity-100"
-              : "invisible -translate-y-2 pointer-events-none opacity-0"
-          }`}
-        >
-          <div className="w-[310px] overflow-hidden border border-gray-100 bg-white shadow-2xl">
-            {items.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="block border-b border-gray-100 px-5 py-4 text-[14px] font-semibold text-[#171717] transition last:border-b-0 hover:bg-[#eef2f7] hover:text-[#293878]"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const MobileAccordion = ({
-    menuName,
-    items,
-  }: MobileAccordionProps) => {
-    const isOpen = mobileOpen === menuName;
-
-    return (
-      <div className="border-b border-gray-200">
-        <button
-          type="button"
-          onClick={() => setMobileOpen(isOpen ? null : menuName)}
-          className="flex w-full items-center justify-between px-5 py-4 text-left font-bold text-[#172c73]"
-        >
-          <span>{menuName}</span>
-
-          <ChevronDown
-            size={19}
-            className={`transition-transform duration-300 ${
-              isOpen ? "rotate-180" : ""
-            }`}
-          />
-        </button>
-
-        {isOpen && (
-          <div className="bg-[#f4f6f8]">
-            {items.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={closeMobileMenu}
-                className="block border-t border-gray-200 px-9 py-3 text-sm font-medium text-gray-700 hover:bg-white hover:text-[#172c73]"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  return (
-    <>
-      {/* TOP BAR */}
-      <div className="hidden bg-[#293878] text-white md:block">
-        <div className="mx-auto flex h-9 max-w-7xl items-center justify-between px-6 text-[14px] font-medium">
-          <div className="flex items-center gap-5">
-            <a
-              href="tel:+918127409027"
-              className="flex items-center gap-2 hover:text-yellow-300"
-            >
-              <Phone size={15} />
-              +91 8127409027
-            </a>
-
-            <a
-              href="mailto:help@moneyhunt.in"
-              className="flex items-center gap-2 hover:text-yellow-300"
-            >
-              <Mail size={15} />
-              help@moneyhunt.in
-            </a>
-          </div>
-
-          <div className="flex items-center gap-5">
-            <Link
-              href="/pay-now"
-              className="flex items-center gap-2 hover:text-yellow-300"
-            >
-              <CreditCard size={15} />
-              Pay Now
-            </Link>
-
-            <Link
-              href="/learning-center"
-              className="flex items-center gap-2 hover:text-yellow-300"
-            >
-              <GraduationCap size={16} />
-              Learning Center
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* HEADER */}
-      <header
-        className={`sticky top-0 z-[100] bg-white transition-all duration-300 ${
-          scrolled ? "shadow-lg" : "shadow-sm"
-        }`}
-      >
-        <div className="mx-auto max-w-7xl px-5 lg:px-6">
-          <div className="flex h-[76px] items-center justify-between">
-            {/* LOGO */}
-            <Link
-              href="/"
-              onClick={closeMobileMenu}
-              className="flex shrink-0 flex-col leading-none"
-            >
-              <span className="text-[24px] font-black tracking-tight text-[#172c73] xl:text-[28px]">
-                MONEYHUNT
-              </span>
-
-              <span className="mt-1 text-[8px] font-bold tracking-[1.2px] text-[#c69000] xl:text-[9px]">
-                STARTUP & TAX CONSULTING SERVICES
-              </span>
-            </Link>
-
-            {/* DESKTOP MENU */}
-            <nav className="ml-8 hidden items-center gap-5 lg:flex xl:gap-8">
-              <DesktopDropdown menuName="STARTUP" items={startupItems} />
-              <DesktopDropdown menuName="GST" items={gstItems} />
-              <DesktopDropdown menuName="TRADEMARK" items={trademarkItems} />
-              <DesktopDropdown menuName="INCOME TAX" items={incomeTaxItems} />
-
-              {/* LICENSE DESKTOP MENU */}
-              <div
+            <div
                 className="relative"
-                onMouseEnter={() => {
-                  setDesktopOpen("LICENSE");
-                  setActiveLicenseMenu(null);
-                }}
+                onMouseEnter={() =>
+                    setDesktopOpen(service.id)
+                }
                 onMouseLeave={() => {
-                  setDesktopOpen(null);
-                  setActiveLicenseMenu(null);
+
+                    setDesktopOpen(null);
+
+                    setDesktopCategory(null);
+
                 }}
-              >
+            >
+
                 <button
-                  type="button"
-                  className="flex items-center gap-1 whitespace-nowrap text-[14px] font-semibold text-[#172c73] transition hover:text-[#c69000] xl:text-[15px]"
+                    className="flex items-center gap-1 whitespace-nowrap text-[15px] font-semibold text-[#293878] hover:text-[#c69000]"
                 >
-                  LICENSE
-                  <ChevronDown size={16} />
+
+                    {service.name}
+
+                    <ChevronDown size={16} />
+
                 </button>
 
                 <div
-                  className={`absolute top-full right-0 z-[999] pt-4 transition-all duration-200 ${
-                    desktopOpen === "LICENSE"
-                      ? "visible translate-y-0 opacity-100"
-                      : "invisible -translate-y-2 pointer-events-none opacity-0"
-                  }`}
+                    className={`absolute top-full pt-4 transition-all duration-300 ${
+                        opened
+                            ? "visible opacity-100"
+                            : "invisible opacity-0 pointer-events-none"
+                    }`}
                 >
-                  {/* MAIN LICENSE BOX */}
-                  <div className="w-[350px] overflow-visible border border-gray-200 bg-white shadow-2xl">
-                    {(Object.keys(licenseCategories) as LicenseKey[]).map(
-                      (key) => {
-                        const category = licenseCategories[key];
-                        const isActive = activeLicenseMenu === key;
 
-                        return (
-                          <div
-                            key={key}
-                            className="relative"
-                            onMouseEnter={() => setActiveLicenseMenu(key)}
-                          >
-                            {/* LEFT SUBMENU: SAME ROW LEVEL */}
-                            {isActive && (
-                              <div className="absolute right-full top-0 z-[1000] w-[350px] overflow-hidden border border-gray-200 bg-[#eef3f7] shadow-2xl">
-                                {category.items.map((item) => (
-                                  <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    className="block border-b border-gray-200 px-6 py-4 text-[14px] font-semibold text-[#171717] transition last:border-b-0 hover:bg-white hover:text-[#293878]"
-                                  >
-                                    {item.name}
-                                  </Link>
-                                ))}
-                              </div>
+                    <div className="relative w-[320px] bg-white border border-gray-200 shadow-2xl">
+
+                        {service.categories.map(
+                            (category) => {
+
+                                const active =
+                                    desktopCategory ===
+                                    category.id;
+
+                                return (
+
+                                    <div
+                                        key={category.id}
+                                        className="relative"
+                                        onMouseEnter={() =>
+                                            setDesktopCategory(
+                                                category.id
+                                            )
+                                        }
+                                    >
+
+                                        {/* <button
+                                            className={`flex justify-between items-center w-full px-5 py-4 border-b text-left transition
+                                            ${
+                                                active
+                                                    ? "bg-[#293878] text-white"
+                                                    : "hover:bg-gray-100"
+                                            }`}
+                                        >
+
+                                            {category.name}
+
+                                            {category.sub_categories
+                                                .length >
+                                                0 && (
+                                                <ChevronRight
+                                                    size={
+                                                        18
+                                                    }
+                                                />
+                                            )}
+
+                                        </button> */}
+{category.sub_categories.length > 0 ? (
+    <button
+        className={`flex justify-between items-center w-full px-5 py-4 border-b text-left transition
+        ${active ? "bg-[#293878] text-white" : "hover:bg-gray-100"}`}
+    >
+        {category.name}
+        <ChevronRight size={18} />
+    </button>
+) : (
+    <Link
+        href="/ServiceUpgrade"
+        className="flex justify-between items-center w-full px-5 py-4 border-b hover:bg-gray-100"
+    >
+        {category.name}
+    </Link>
+)}
+                                        {active &&
+                                            category
+                                                .sub_categories
+                                                .length >
+                                                0 && (
+
+                                                <div className="absolute right-full top-0 w-[280px] bg-[#eef2f7] border border-gray-200 shadow-2xl">
+
+                                                    {category.sub_categories.map(
+                                                        (
+                                                            sub
+                                                        ) => (
+//  <Link
+//                                                                 key={
+//                                                                     sub.id
+//                                                                 }
+//                                                                 href={`/service/${service.slug}/${category.slug}/${sub.slug}`}
+//                                                                 className="block border-b px-6 py-4 text-sm hover:bg-white hover:text-[#293878]"
+//                                                             >
+
+//                                                                 {
+//                                                                     sub.name
+//                                                                 }
+
+//                                                             </Link>
+
+                                                            <Link
+        key={sub.id}
+        href="/ServiceUpgrade"
+        onClick={closeMobile}
+        className="block border-t px-12 py-3 text-sm hover:bg-gray-100"
+    >
+        {sub.name}
+    </Link>
+                                                        )
+                                                    )}
+
+                                                </div>
+
+                                            )}
+
+                                    </div>
+
+                                );
+
+                            }
+                        )}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        );
+
+    };
+        const MobileDropdown = ({
+        service,
+    }: {
+        service: Service;
+    }) => {
+
+        const opened =
+            mobileOpen === service.id;
+
+        return (
+
+            <div className="border-b border-gray-200">
+
+                <button
+                    onClick={() =>
+                        setMobileOpen(
+                            opened
+                                ? null
+                                : service.id
+                        )
+                    }
+                    className="flex w-full items-center justify-between px-5 py-4 font-semibold text-[#293878]"
+                >
+
+                    <span>{service.name}</span>
+
+                    <ChevronDown
+                        size={18}
+                        className={`transition ${
+                            opened
+                                ? "rotate-180"
+                                : ""
+                        }`}
+                    />
+
+                </button>
+
+                {opened && (
+
+                    <div className="bg-gray-50">
+
+                        {service.categories.map(
+                            (
+                                category
+                            ) => {
+
+                                const active =
+                                    mobileCategory ===
+                                    category.id;
+
+                                return (
+
+                                    <div
+                                        key={
+                                            category.id
+                                        }
+                                        className="border-t"
+                                    >
+
+                                        {/* <button
+                                            onClick={() =>
+                                                setMobileCategory(
+                                                    active
+                                                        ? null
+                                                        : category.id
+                                                )
+                                            }
+                                            className={`flex w-full items-center justify-between px-8 py-3 text-left font-medium ${
+                                                active
+                                                    ? "bg-[#293878] text-white"
+                                                    : ""
+                                            }`}
+                                        >
+
+                                            <span>
+                                                {
+                                                    category.name
+                                                }
+                                            </span>
+
+                                            {category
+                                                .sub_categories
+                                                .length >
+                                                0 && (
+
+                                                <ChevronDown
+                                                    size={
+                                                        16
+                                                    }
+                                                    className={`transition ${
+                                                        active
+                                                            ? "rotate-180"
+                                                            : ""
+                                                    }`}
+                                                />
+
+                                            )}
+
+                                        </button> */}
+{category.sub_categories.length > 0 ? (
+    <button
+        onClick={() =>
+            setMobileCategory(active ? null : category.id)
+        }
+        className={`flex w-full items-center justify-between px-8 py-3 text-left font-medium ${
+            active ? "bg-[#293878] text-white" : ""
+        }`}
+    >
+        <span>{category.name}</span>
+        <ChevronDown
+            size={16}
+            className={active ? "rotate-180" : ""}
+        />
+    </button>
+) : (
+    <Link
+        href="/ServiceUpgrade"
+        onClick={closeMobile}
+        className="block px-8 py-3 font-medium hover:bg-gray-100"
+    >
+        {category.name}
+    </Link>
+)}
+                                        {active &&
+                                            category
+                                                .sub_categories
+                                                .length >
+                                                0 && (
+
+                                                <div className="bg-white">
+
+                                                    {category.sub_categories.map(
+                                                        (
+                                                            sub
+                                                        ) => (
+
+                                                            // <Link
+                                                            //     key={
+                                                            //         sub.id
+                                                            //     }
+                                                            //     href={`/service/${service.slug}/${category.slug}/${sub.slug}`}
+                                                            //     onClick={
+                                                            //         closeMobile
+                                                            //     }
+                                                            //     className="block border-t px-12 py-3 text-sm hover:bg-gray-100"
+                                                            // >
+
+                                                            //     {
+                                                            //         sub.name
+                                                            //     }
+
+                                                            // </Link>
+  <Link
+        key={sub.id}
+        href="/ServiceUpgrade"
+        onClick={closeMobile}
+        className="block border-t px-12 py-3 text-sm hover:bg-gray-100"
+    >
+        {sub.name}
+    </Link>
+                                                        )
+                                                    )}
+
+                                                </div>
+
+                                            )}
+
+                                    </div>
+
+                                );
+
+                            }
+                        )}
+
+                    </div>
+
+                )}
+
+            </div>
+
+        );
+
+    };
+
+    return (
+
+        <>
+
+            {/* Top Bar */}
+
+            <div className="hidden bg-[#293878] text-white md:block">
+
+                <div className="mx-auto flex h-9 max-w-7xl items-center justify-between px-6 text-sm">
+
+                    <div className="flex items-center gap-6">
+
+                        <a
+                            href="tel:+918127409027"
+                            className="flex items-center gap-2 hover:text-yellow-300"
+                        >
+
+                            <Phone size={15} />
+
+                            +91 8127409027
+
+                        </a>
+
+                        <a
+                            href="mailto:help@moneyhunt.in"
+                            className="flex items-center gap-2 hover:text-yellow-300"
+                        >
+
+                            <Mail size={15} />
+
+                            help@moneyhunt.in
+
+                        </a>
+
+                    </div>
+
+                    <div className="flex items-center gap-6">
+
+                        <Link
+                            href="/pay-now"
+                            className="flex items-center gap-2 hover:text-yellow-300"
+                        >
+
+                            <CreditCard size={15} />
+
+                            Pay Now
+
+                        </Link>
+
+                        <Link
+                            href="/learning-center"
+                            className="flex items-center gap-2 hover:text-yellow-300"
+                        >
+
+                            <GraduationCap size={15} />
+
+                            Learning Center
+
+                        </Link>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <header
+                className={`sticky top-0 z-50 bg-white transition-all duration-300 ${
+                    scrolled
+                        ? "shadow-lg"
+                        : "shadow"
+                }`}
+            >
+
+                <div className="mx-auto max-w-7xl px-5">
+
+                    <div className="flex h-20 items-center justify-between">
+
+                        <Link
+                            href="/"
+                            className="leading-none"
+                        >
+
+                            <div className="text-3xl font-black text-[#293878]">
+                                MONEYHUNT
+                            </div>
+
+                            <div className="text-[9px] font-bold tracking-[2px] text-[#c69000]">
+                                STARTUP & TAX CONSULTING SERVICES
+                            </div>
+
+                        </Link>
+
+                        <nav className="hidden items-center gap-7 lg:flex">
+
+                            {activeServices.map(
+                                (
+                                    service
+                                ) => (
+
+                                    <DesktopDropdown
+                                        key={
+                                            service.id
+                                        }
+                                        service={
+                                            service
+                                        }
+                                    />
+
+                                )
+                            )}
+                                                        <button
+                                type="button"
+                                className="text-[#293878] transition hover:text-[#c69000]"
+                            >
+                                <Search size={21} />
+                            </button>
+
+                            {!user ? (
+                                <>
+                                    <Link
+                                        href="/login"
+                                        className="rounded-lg bg-[#293878] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1f2f63]"
+                                    >
+                                        Login
+                                    </Link>
+
+                                    <Link
+                                        href="/register"
+                                        className="rounded-lg bg-[#c69000] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#a97d00]"
+                                    >
+                                        Register
+                                    </Link>
+                                </>
+                            ) : (
+                                <div className="relative">
+
+                                    <button
+                                        onClick={() =>
+                                            setProfileOpen(!profileOpen)
+                                        }
+                                        className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-3 py-2 transition hover:border-[#293878] hover:shadow-md"
+                                    >
+                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#293878] font-bold text-white">
+                                            {user.name
+                                                .charAt(0)
+                                                .toUpperCase()}
+                                        </div>
+
+                                        <div className="hidden text-left xl:block">
+                                            <div className="text-sm font-semibold text-[#293878]">
+                                                {user.name}
+                                            </div>
+
+                                            <div className="text-xs text-gray-500">
+                                                My Account
+                                            </div>
+                                        </div>
+
+                                        <ChevronDown
+                                            size={18}
+                                            className={`transition ${
+                                                profileOpen
+                                                    ? "rotate-180"
+                                                    : ""
+                                            }`}
+                                        />
+                                    </button>
+
+                                    {profileOpen && (
+
+                                        <div className="absolute right-0 mt-3 w-72 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl">
+
+                                            <div className="bg-[#293878] px-5 py-5 text-white">
+
+                                                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white text-lg font-bold text-[#293878]">
+
+                                                    {user.name
+                                                        .charAt(0)
+                                                        .toUpperCase()}
+
+                                                </div>
+
+                                                <h3 className="font-semibold">
+                                                    {user.name}
+                                                </h3>
+
+                                                <p className="text-sm text-blue-100">
+                                                    {user.email}
+                                                </p>
+
+                                            </div>
+
+                                            <Link
+                                                href="/dashboard"
+                                                className="block px-5 py-3 hover:bg-gray-100"
+                                            >
+                                                📊 Dashboard
+                                            </Link>
+
+                                            <Link
+                                                href="/orders"
+                                                className="block px-5 py-3 hover:bg-gray-100"
+                                            >
+                                                📦 My Orders
+                                            </Link>
+
+                                            <Link
+                                                href="/documents"
+                                                className="block px-5 py-3 hover:bg-gray-100"
+                                            >
+                                                📄 My Documents
+                                            </Link>
+
+                                            <Link
+                                                href="/profile"
+                                                className="block px-5 py-3 hover:bg-gray-100"
+                                            >
+                                                👤 Profile
+                                            </Link>
+
+                                            <div className="border-t" />
+
+                                            <Link
+                                                href="/logout"
+                                                method="post"
+                                                as="button"
+                                                className="block w-full px-5 py-3 text-left font-semibold text-red-600 hover:bg-red-50"
+                                            >
+                                                🚪 Logout
+                                            </Link>
+
+                                        </div>
+
+                                    )}
+
+                                </div>
                             )}
 
-                            {/* MAIN ITEM */}
-                            <button
-                              type="button"
-                              className={`flex w-full items-center justify-between border-b border-gray-200 px-5 py-5 text-left text-[14px] font-bold transition last:border-b-0 ${
-                                isActive
-                                  ? "bg-[#293878] text-white"
-                                  : "text-[#171717] hover:bg-[#eef3f7]"
-                              }`}
-                            >
-                              <span>{category.title}</span>
-                              <ChevronRight size={18} />
-                            </button>
-                          </div>
-                        );
-                      }
-                    )}
-                  </div>
-                </div>
-              </div>
+                        </nav>
+                                                {/* Mobile Menu Button */}
 
-              <DesktopDropdown menuName="ROC" items={rocItems} align="right" />
-
-              <DesktopDropdown menuName="NGO" items={ngoItems} align="right" />
-
-              <button
-                type="button"
-                className="text-[#172c73] hover:text-[#c69000]"
-                aria-label="Search"
-              >
-                <Search size={21} strokeWidth={2.5} />
-              </button>
-              {!user ? (
-  <>
-    <Link
-      href="/login"
-      className="premium-register rounded-lg bg-[#293878] px-5 py-2 text-sm font-semibold text-white"
-    >
-      Login
-    </Link>
-
-    <Link
-      href="/register"
-      className="premium-register rounded-lg bg-[#293878] px-5 py-2 text-sm font-semibold text-white"
-    >
-      Register
-    </Link>
-  </>
-) : (
-  <div className="flex items-center gap-2">
-    <div className="relative">
-
-      {/* Profile Button */}
-      <button
-        onClick={() => setProfileOpen(!profileOpen)}
-        className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-3 py-2 transition-all duration-300 hover:border-[#293878] hover:shadow-md"
-      >
-        {/* Avatar */}
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#293878] text-sm font-bold text-white">
-          {user.name.charAt(0).toUpperCase()}
-        </div>
-
-        {/* Name */}
-        <div className="hidden text-left xl:block">
-          <p className="text-sm font-semibold text-[#293878]">
-            {user.name}
-          </p>
-          <p className="text-xs text-gray-500">
-            My Account
-          </p>
-        </div>
-
-        <ChevronDown
-          size={18}
-          className={`transition-transform duration-300 ${
-            profileOpen ? "rotate-180" : ""
-          }`}
-        />
-      </button>
-
-      {/* Dropdown */}
-      {profileOpen && (
-        <div className="absolute right-0 mt-3 w-72 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl">
-
-          <div className="bg-[#293878] px-5 py-4 text-white">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white text-lg font-bold text-[#293878]">
-              {user.name.charAt(0).toUpperCase()}
-            </div>
-
-            <h3 className="font-semibold">
-              {user.name}
-            </h3>
-
-            <p className="text-sm text-blue-100">
-              {user.email}
-            </p>
-          </div>
-
-          <Link
-            href="/dashboard"
-            className="block px-5 py-3 text-sm font-medium hover:bg-gray-100"
-          >
-            📊 Dashboard
-          </Link>
-
-          <Link
-            href="/orders"
-            className="block px-5 py-3 text-sm font-medium hover:bg-gray-100"
-          >
-            📦 My Orders
-          </Link>
-
-          <Link
-            href="/profile"
-            className="block px-5 py-3 text-sm font-medium hover:bg-gray-100"
-          >
-            👤 My Profile
-          </Link>
-
-          <Link
-            href="/documents"
-            className="block px-5 py-3 text-sm font-medium hover:bg-gray-100"
-          >
-            📄 My Documents
-          </Link>
-
-          <div className="border-t"></div>
-
-          <Link
-            href="/logout"
-            method="post"
-            as="button"
-            className="block w-full px-5 py-3 text-left text-sm font-semibold text-red-600 hover:bg-red-50"
-          >
-            🚪 Logout
-          </Link>
-        </div>
-      )}
-
-    </div>
-  </div>
-)}
-            </nav>
-
-            {/* MOBILE MENU BUTTON */}
-            <button
-              type="button"
-              onClick={() => setMobileMenu(!mobileMenu)}
-              className="flex h-11 w-11 items-center justify-center rounded-md border border-gray-300 text-[#172c73] hover:bg-gray-50 lg:hidden"
-            >
-              {mobileMenu ? <X size={24} /> : <Menu size={25} />}
-            </button>
-          </div>
-        </div>
-
-        {/* MOBILE MENU */}
-        {mobileMenu && (
-          <div className="absolute left-0 top-full z-[999] max-h-[calc(100vh-76px)] w-full overflow-y-auto border-t border-gray-200 bg-white shadow-2xl lg:hidden">
-            <Link
-              href="/"
-              onClick={closeMobileMenu}
-              className="block border-b border-gray-200 px-5 py-4 font-bold text-[#172c73]"
-            >
-              HOME
-            </Link>
-
-            <MobileAccordion menuName="STARTUP" items={startupItems} />
-            <MobileAccordion menuName="GST" items={gstItems} />
-            <MobileAccordion menuName="TRADEMARK" items={trademarkItems} />
-            <MobileAccordion menuName="INCOME TAX" items={incomeTaxItems} />
-
-            {/* MOBILE LICENSE */}
-            <div className="border-b border-gray-200">
-              <button
-                type="button"
-                onClick={() => {
-                  const isClosing = mobileOpen === "LICENSE";
-
-                  setMobileOpen(isClosing ? null : "LICENSE");
-
-                  if (isClosing) {
-                    setMobileLicenseOpen(null);
-                  }
-                }}
-                className="flex w-full items-center justify-between px-5 py-4 text-left font-bold text-[#172c73]"
-              >
-                <span>LICENSE</span>
-
-                <ChevronDown
-                  size={19}
-                  className={`transition-transform duration-300 ${
-                    mobileOpen === "LICENSE" ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-
-              {mobileOpen === "LICENSE" && (
-                <div className="bg-[#f4f6f8]">
-                  {(Object.keys(licenseCategories) as LicenseKey[]).map(
-                    (key) => {
-                      const category = licenseCategories[key];
-                      const isActive = mobileLicenseOpen === key;
-
-                      return (
-                        <div key={key} className="border-t border-gray-200">
-                          <button
+                        <button
                             type="button"
                             onClick={() =>
-                              setMobileLicenseOpen(isActive ? null : key)
+                                setMobileMenu(!mobileMenu)
                             }
-                            className={`flex w-full items-center justify-between px-7 py-4 text-left text-sm font-bold ${
-                              isActive
-                                ? "bg-[#293878] text-white"
-                                : "bg-white text-[#172c73]"
-                            }`}
-                          >
-                            <span>{category.title}</span>
+                            className="flex h-11 w-11 items-center justify-center rounded-md border border-gray-300 text-[#293878] hover:bg-gray-50 lg:hidden"
+                        >
+                            {mobileMenu ? (
+                                <X size={24} />
+                            ) : (
+                                <Menu size={24} />
+                            )}
+                        </button>
 
-                            <ChevronDown
-                              size={18}
-                              className={`transition-transform duration-300 ${
-                                isActive ? "rotate-180" : ""
-                              }`}
-                            />
-                          </button>
+                    </div>
 
-                          {isActive && (
-                            <div className="bg-[#eef2f6]">
-                              {category.items.map((item) => (
-                                <Link
-                                  key={item.name}
-                                  href={item.href}
-                                  onClick={closeMobileMenu}
-                                  className="block border-t border-gray-200 px-10 py-3 text-sm font-medium text-gray-700 hover:bg-white hover:text-[#172c73]"
-                                >
-                                  {item.name}
-                                </Link>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    }
-                  )}
                 </div>
-              )}
-            </div>
 
-            <MobileAccordion menuName="ROC" items={rocItems} />
-            <MobileAccordion menuName="NGO" items={ngoItems} />
+                {/* ================= MOBILE MENU ================= */}
 
-            <div className="p-5">
-              <button
-                type="button"
-                className="flex w-full items-center justify-center gap-2 rounded bg-[#293878] py-3 font-bold text-white"
-              >
-                <Search size={18} />
-                Search Services
-              </button>
-            </div>
-          </div>
-        )}
-      </header>
-    </>
-  );
+                {mobileMenu && (
+
+                    <div className="absolute left-0 top-full z-[999] max-h-[calc(100vh-80px)] w-full overflow-y-auto border-t border-gray-200 bg-white shadow-2xl lg:hidden">
+
+                        <Link
+                            href="/"
+                            onClick={closeMobile}
+                            className="block border-b border-gray-200 px-5 py-4 font-bold text-[#293878]"
+                        >
+                            HOME
+                        </Link>
+
+                        {activeServices.map((service) => (
+
+                            <MobileDropdown
+                                key={service.id}
+                                service={service}
+                            />
+
+                        ))}
+
+                        <div className="border-t p-5">
+
+                            {!user ? (
+
+                                <div className="space-y-3">
+
+                                    <Link
+                                        href="/login"
+                                        onClick={closeMobile}
+                                        className="block rounded-lg bg-[#293878] py-3 text-center font-semibold text-white"
+                                    >
+                                        Login
+                                    </Link>
+
+                                    <Link
+                                        href="/register"
+                                        onClick={closeMobile}
+                                        className="block rounded-lg bg-[#c69000] py-3 text-center font-semibold text-white"
+                                    >
+                                        Register
+                                    </Link>
+
+                                </div>
+
+                            ) : (
+
+                                <div className="space-y-2">
+
+                                    <div className="mb-4 flex items-center gap-3">
+
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#293878] text-lg font-bold text-white">
+
+                                            {user.name.charAt(0).toUpperCase()}
+
+                                        </div>
+
+                                        <div>
+
+                                            <div className="font-semibold text-[#293878]">
+                                                {user.name}
+                                            </div>
+
+                                            <div className="text-sm text-gray-500">
+                                                {user.email}
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <Link
+                                        href="/dashboard"
+                                        onClick={closeMobile}
+                                        className="block rounded-lg px-4 py-3 hover:bg-gray-100"
+                                    >
+                                        📊 Dashboard
+                                    </Link>
+
+                                    <Link
+                                        href="/orders"
+                                        onClick={closeMobile}
+                                        className="block rounded-lg px-4 py-3 hover:bg-gray-100"
+                                    >
+                                        📦 My Orders
+                                    </Link>
+
+                                    <Link
+                                        href="/documents"
+                                        onClick={closeMobile}
+                                        className="block rounded-lg px-4 py-3 hover:bg-gray-100"
+                                    >
+                                        📄 My Documents
+                                    </Link>
+
+                                    <Link
+                                        href="/profile"
+                                        onClick={closeMobile}
+                                        className="block rounded-lg px-4 py-3 hover:bg-gray-100"
+                                    >
+                                        👤 My Profile
+                                    </Link>
+
+                                    <Link
+                                        href="/logout"
+                                        method="post"
+                                        as="button"
+                                        className="block w-full rounded-lg px-4 py-3 text-left text-red-600 hover:bg-red-50"
+                                    >
+                                        🚪 Logout
+                                    </Link>
+
+                                </div>
+
+                            )}
+
+                            <button
+                                className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-[#293878] py-3 font-semibold text-white hover:bg-[#1f2f63]"
+                            >
+                                <Search size={18} />
+                                Search Services
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                )}
+
+            </header>
+
+        </>
+
+    );
+
 }
