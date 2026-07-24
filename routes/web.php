@@ -108,8 +108,6 @@ Route::prefix('admin')->group(function () {
 
 });
 
-// ====================== TEMP ADMIN CREATE ======================
-
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -117,10 +115,10 @@ use App\Models\User;
 Route::get('/create-admin', function () {
 
     DB::table('admins')->updateOrInsert(
-        ['email' => 'admin@moneyhunt.com'],
+        ['email' => 'admin@example.com'],
         [
             'name'       => 'Admin',
-            'email'      => 'admin@moneyhunt.com',
+            'email'      => 'admin@example.com',
             'password'   => Hash::make('admin123'),
             'created_at' => now(),
             'updated_at' => now(),
@@ -145,5 +143,7 @@ Route::get('/generate-regno', function () {
 
     return '✅ Registration Numbers Generated Successfully';
 });
+
+require __DIR__.'/settings.php';
 
 require __DIR__.'/settings.php';
