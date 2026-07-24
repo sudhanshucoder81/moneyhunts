@@ -108,4 +108,42 @@ Route::prefix('admin')->group(function () {
 
 });
 
+// ====================== TEMP ADMIN CREATE ======================
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
+Route::get('/create-admin', function () {
+
+    DB::table('admins')->updateOrInsert(
+        ['email' => 'admin@moneyhunt.com'],
+        [
+            'name'       => 'Admin',
+            'email'      => 'admin@moneyhunt.com',
+            'password'   => Hash::make('admin123'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]
+    );
+
+    return '✅ Admin Created Successfully';
+});
+
+Route::get('/generate-regno', function () {
+
+    $count = 1;
+
+    User::orderBy('id')->get()->each(function ($user) use (&$count) {
+
+        $user->update([
+            'reg_no' => 'MH' . date('Y') . str_pad($count, 6, '0', STR_PAD_LEFT),
+        ]);
+
+        $count++;
+    });
+
+    return '✅ Registration Numbers Generated Successfully';
+});
+
 require __DIR__.'/settings.php';
