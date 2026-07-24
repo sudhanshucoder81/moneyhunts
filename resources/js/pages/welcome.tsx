@@ -25,27 +25,27 @@ export default function Welcome() {
 
 const faqs = [
   {
-    question: "What is SetupFiling.in and who founded it?",
+    question: "What is Moneyhunt.in and who founded it?",
     answer:
-      "SetupFiling.in is India’s leading online professional business services platform..."
+      "Moneyhunt.in is India’s leading online professional business services platform..."
   },
   {
-    question: "Who are the professionals behind SetupFiling.in?",
+    question: "Who are the professionals behind Moneyhunt.in?",
     answer:
       "We are backed by qualified Chartered Accountants, Company Secretaries and Trademark Attorneys."
   },
   {
-    question: "How many businesses has SetupFiling.in helped so far?",
+    question: "How many businesses has Moneyhunt.in helped so far?",
     answer:
       "Thousands of businesses across India trust our services."
   },
   {
-    question: "What is the mission of SetupFiling.in?",
+    question: "What is the mission of Moneyhunt.in?",
     answer:
       "To simplify business registrations and compliance."
   },
   {
-    question: "Is SetupFiling.in and SetupFilings.com are same?",
+    question: "Is Moneyhunt.in and MoneyHunt.com are same?",
     answer:
       "Please refer to official company communication."
   }
@@ -912,7 +912,7 @@ const faqs = [
                     </h3>
 
                     <p className="text-gray-700 leading-8 text-justify">
-                        Setupfiling.in is founded and run by Chartered
+                        Moneyhunt.in is founded and run by Chartered
                         Accountants (CA), Company Secretaries (CS),
                         and Trademark Attorneys with over 15+ years
                         of experience.
