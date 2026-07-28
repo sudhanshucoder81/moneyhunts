@@ -5,6 +5,7 @@ import {Shield,Users,Star,Clock3,Headphones,
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import { useState } from "react";
+import "swiper/css";
 import {
     Linkedin,
     Facebook,
@@ -96,6 +97,40 @@ const handleSubmit = (e: React.FormEvent) => {
 
   setShowDemo(false);
 };
+const testimonials = [
+  {
+    name: "Rahul Sharma",
+    city: "Delhi",
+    image: "/images/user1.png",
+    review:
+      "MoneyHunt made our company registration process extremely smooth. Highly recommended!",
+    rating: 5,
+  },
+  {
+    name: "Priya Gupta",
+    city: "Lucknow",
+    image: "/images/user3.png",
+    review:
+      "Excellent support for GST Registration. The team is professional and responsive.",
+    rating: 5,
+  },
+  {
+    name: "Amit Verma",
+    city: "Mumbai",
+    image: "/images/user2.png",
+    review:
+      "Very quick service for Trademark Registration. Amazing experience with MoneyHunt.",
+    rating: 5,
+  },
+  {
+    name: "Sneha Singh",
+    city: "Noida",
+    image: "/images/user4.png",
+    review:
+      "Professional team with excellent customer support. Everything was completed on time.",
+    rating: 5,
+  },
+];
 const faqs = [
   {
     question: "What is Moneyhunt.in and who founded it?",
@@ -1479,6 +1514,104 @@ and Trademark Attorneys with over                     </p>
         </div>
 
     </div>
+
+</section>
+<section className="py-20 bg-gray-50">
+
+  <div className="max-w-7xl mx-auto px-6">
+
+    <div className="text-center mb-14">
+
+      <span className="text-yellow-500 font-semibold text-lg">
+        ⭐ Testimonials
+      </span>
+
+      <h2 className="text-4xl font-bold mt-3">
+        What Our Clients Say
+      </h2>
+
+      <div className="w-28 h-1 bg-yellow-500 mx-auto mt-5 rounded-full"></div>
+
+      <p className="mt-6 text-gray-600 text-lg">
+        Trusted by 50,000+ Businesses Across India
+      </p>
+
+    </div>
+
+    <Swiper
+      modules={[Autoplay]}
+      autoplay={{
+        delay: 2500,
+        disableOnInteraction: false,
+      }}
+      loop={true}
+      spaceBetween={30}
+      breakpoints={{
+        320: {
+          slidesPerView: 1,
+        },
+        768: {
+          slidesPerView: 2,
+        },
+        1024: {
+          slidesPerView: 3,
+        },
+      }}
+    >
+
+      {testimonials.map((item, index) => (
+
+        <SwiperSlide key={index}>
+
+          <div className="bg-white rounded-3xl shadow-xl p-8 hover:-translate-y-2 hover:shadow-2xl transition duration-300">
+
+            <div className="flex gap-1 mb-5">
+
+              {[...Array(item.rating)].map((_, i) => (
+                <Star
+                  key={i}
+                  size={20}
+                  className="fill-yellow-400 text-yellow-400"
+                />
+              ))}
+
+            </div>
+
+            <p className="text-gray-600 leading-8 italic">
+              "{item.review}"
+            </p>
+
+            <div className="flex items-center gap-4 mt-8">
+
+              <img
+                src={item.image}
+                alt={item.name}
+                className="w-16 h-16 rounded-full object-cover"
+              />
+
+              <div>
+
+                <h4 className="font-bold text-lg">
+                  {item.name}
+                </h4>
+
+                <p className="text-gray-500">
+                  {item.city}
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </SwiperSlide>
+
+      ))}
+
+    </Swiper>
+
+  </div>
 
 </section>
       </main>
