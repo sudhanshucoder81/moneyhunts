@@ -22,7 +22,80 @@ import {
 } from "lucide-react";
 export default function Welcome() {
   const [open, setOpen] = useState(0);
+const [showDemo, setShowDemo] = useState(false);
+const [formData, setFormData] = useState({
+  name: "",
+  mobile: "",
+  email: "",
+  business: "",
+  service: "",
+  date: "",
+  time: "",
+  city: "",
+  message: "",
+});
 
+const [errors, setErrors] = useState<any>({});
+const handleChange = (
+  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+) => {
+  setFormData({
+    ...formData,
+    [e.target.name]: e.target.value,
+  });
+
+  setErrors({
+    ...errors,
+    [e.target.name]: "",
+  });
+};
+const validate = () => {
+  let newErrors: any = {};
+
+  if (!formData.name.trim())
+    newErrors.name = "Full Name is required";
+
+  if (!formData.mobile)
+    newErrors.mobile = "Mobile Number is required";
+  else if (!/^[6-9]\d{9}$/.test(formData.mobile))
+    newErrors.mobile = "Enter valid Mobile Number";
+
+  if (!formData.email)
+    newErrors.email = "Email is required";
+
+  if (!formData.business)
+    newErrors.business = "Business Name is required";
+
+  if (!formData.service)
+    newErrors.service = "Select Service";
+
+  if (!formData.date)
+    newErrors.date = "Select Date";
+
+  if (!formData.time)
+    newErrors.time = "Select Time";
+
+  if (!formData.city)
+    newErrors.city = "City is required";
+
+  if (!formData.message)
+    newErrors.message = "Message is required";
+
+  setErrors(newErrors);
+
+  return Object.keys(newErrors).length === 0;
+};
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!validate()) return;
+
+ alert("✅ Thank you! Your demo request has been submitted successfully.\n\nOur MoneyHunt team will contact you shortly.");
+
+  console.log(formData);
+
+  setShowDemo(false);
+};
 const faqs = [
   {
     question: "What is Moneyhunt.in and who founded it?",
@@ -106,10 +179,13 @@ const faqs = [
                   View Our Services
                 </button>
 
-                <button className="bg-white text-black hover:bg-gray-100 px-8 py-4 rounded font-semibold text-lg flex items-center justify-center gap-2">
-                  <Headphones size={22} />
-                  Talk to an Expert
-                </button>
+               <button
+    onClick={() => setShowDemo(true)}
+    className="bg-white text-black hover:bg-gray-100 px-8 py-4 rounded font-semibold text-lg flex items-center justify-center gap-2"
+>
+    <Headphones size={22} />
+    Book Demo
+</button>
 
               </div>
 
@@ -1274,10 +1350,12 @@ and Trademark Attorneys with over                     </p>
                     View Our Services
                 </button>
 
-                <button className="bg-white text-black px-8 py-4 rounded font-semibold flex items-center justify-center gap-2 hover:bg-gray-100 transition">
-                    
-                    Book Free Consultation
-                </button>
+                <button
+    onClick={() => setShowDemo(true)}
+    className="bg-white text-black px-8 py-4 rounded font-semibold flex items-center justify-center gap-2 hover:bg-gray-100 transition"
+>
+    Book Demo
+</button>
 
             </div>
 
@@ -1404,7 +1482,363 @@ and Trademark Attorneys with over                     </p>
 
 </section>
       </main>
+{showDemo && (
+  <div className="fixed inset-0 z-[999] bg-black/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
 
+    <div className="relative w-full max-w-6xl h-[95vh] bg-white rounded-3xl shadow-[0_20px_80px_rgba(0,0,0,.35)] overflow-hidden">
+
+      {/* Close Button */}
+      <button
+        onClick={() => setShowDemo(false)}
+        className="absolute top-4 right-4 z-50 w-11 h-11 rounded-full bg-white shadow-lg hover:bg-red-500 hover:text-white transition-all duration-300"
+      >
+        ✕
+      </button>
+
+      <div className="grid lg:grid-cols-[42%_58%] h-full">
+
+        {/* LEFT PANEL */}
+        <div className="hidden lg:flex relative overflow-hidden bg-gradient-to-br from-[#243B87] via-[#2d4cb0] to-[#1a255c] text-white">
+
+          {/* Background Glow */}
+          <div className="absolute -top-24 -left-24 w-72 h-72 bg-yellow-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-80 h-80 bg-blue-400/20 rounded-full blur-3xl"></div>
+
+          <div className="relative z-10 p-12 flex flex-col justify-center">
+
+            <span className="inline-flex items-center gap-2 bg-yellow-400 text-black px-5 py-2 rounded-full font-semibold w-fit">
+              🚀 Book Free Demo
+            </span>
+
+            <h2 className="text-3xl font-extrabold leading-tight mt-2">
+              Grow Your
+              <br />
+              Business With
+              <span className="text-yellow-400">
+                {" "}MoneyHunt
+              </span>
+            </h2>
+
+            <p className="mt-6 text-white/90 leading-8 text-lg">
+              Schedule a FREE consultation with our experts.
+              We help startups and businesses with Company
+              Registration, GST, Trademark, Income Tax,
+              Compliance and Legal Services.
+            </p>
+
+            <div className="mt-10 space-y-6">
+
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center text-xl">
+                  ✔
+                </div>
+                <div>
+                  <h4 className="font-bold">
+                    Free Consultation
+                  </h4>
+                  <p className="text-white/70 text-sm">
+                    No hidden charges
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center text-xl">
+                  ⏰
+                </div>
+                <div>
+                  <h4 className="font-bold">
+                    30 Minutes Demo
+                  </h4>
+                  <p className="text-white/70 text-sm">
+                    One-to-one expert session
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center text-xl">
+                  🔒
+                </div>
+                <div>
+                  <h4 className="font-bold">
+                    Secure Process
+                  </h4>
+                  <p className="text-white/70 text-sm">
+                    Your information stays safe
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center text-xl">
+                  ⭐
+                </div>
+                <div>
+                  <h4 className="font-bold">
+                    50,000+ Happy Clients
+                  </h4>
+                  <p className="text-white/70 text-sm">
+                    Trusted across India
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* RIGHT PANEL */}
+        <div className="bg-white h-full overflow-y-auto">
+
+          <div className="p-6 sm:p-8 lg:p-10">
+
+            <h3 className="text-3xl font-bold text-[#243B87]">
+              Schedule Your Demo
+            </h3>
+
+            <p className="text-gray-500 mt-2 mb-4">
+              Fill your details and our team will contact you shortly.
+            </p>
+
+           <form onSubmit={handleSubmit} className="space-y-5">
+              
+                         {/* Name & Mobile */}
+              <div className="grid md:grid-cols-2 gap-5">
+
+               <div>
+    {errors.name && (
+        <p className="text-red-500 text-sm mb-1">
+            {errors.name}
+        </p>
+    )}
+
+    <input
+        type="text"
+        name="name"
+        value={formData.name}
+        onChange={handleChange}
+        placeholder="Full Name"
+        className={`w-full rounded-xl px-5 py-3 border ${
+            errors.name
+                ? "border-red-500"
+                : "border-gray-300"
+        }`}
+    />
+</div>
+
+              <div>
+    {errors.mobile && (
+        <p className="text-red-500 text-sm mb-1">
+            {errors.mobile}
+        </p>
+    )}
+
+    <input
+        type="tel"
+        name="mobile"
+        value={formData.mobile}
+        onChange={handleChange}
+        placeholder="Mobile Number"
+        className={`w-full rounded-xl px-5 py-3 border ${
+            errors.mobile
+                ? "border-red-500"
+                : "border-gray-300"
+        }`}
+    />
+</div>
+
+              </div>
+
+              {/* Email & Business */}
+              <div className="grid md:grid-cols-2 gap-5">
+
+               <div>
+    {errors.email && (
+        <p className="text-red-500 text-sm mb-1">
+            {errors.email}
+        </p>
+    )}
+
+    <input
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        placeholder="Email"
+        className={`w-full rounded-xl px-5 py-3 border ${
+            errors.email
+                ? "border-red-500"
+                : "border-gray-300"
+        }`}
+    />
+</div>
+
+               <div>
+    {errors.business && (
+        <p className="text-red-500 text-sm mb-1">
+            {errors.business}
+        </p>
+    )}
+
+    <input
+        type="text"
+        name="business"
+        value={formData.business}
+        onChange={handleChange}
+        placeholder="Business Name"
+        className={`w-full rounded-xl px-5 py-3 border ${
+            errors.business
+                ? "border-red-500"
+                : "border-gray-300"
+        }`}
+    />
+</div>
+
+              </div>
+
+              {/* Service & Date */}
+              <div className="grid md:grid-cols-2 gap-5">
+
+                <div>
+    {errors.service && (
+        <p className="text-red-500 text-sm mb-1">
+            {errors.service}
+        </p>
+    )}
+
+    <select
+        name="service"
+        value={formData.service}
+        onChange={handleChange}
+        className={`w-full rounded-xl px-5 py-3 border ${
+            errors.service
+                ? "border-red-500"
+                : "border-gray-300"
+        }`}
+    >
+        <option value="">Select Service</option>
+        <option>Company Registration</option>
+        <option>GST Registration</option>
+        <option>Trademark Registration</option>
+    </select>
+</div>
+
+                <div>
+    {errors.date && (
+        <p className="text-red-500 text-sm mb-1">
+            {errors.date}
+        </p>
+    )}
+
+    <input
+        type="date"
+        name="date"
+        value={formData.date}
+        onChange={handleChange}
+        className={`w-full rounded-xl px-5 py-3 border ${
+            errors.date
+                ? "border-red-500"
+                : "border-gray-300"
+        }`}
+    />
+</div>
+
+              </div>
+
+              {/* Time & City */}
+              <div className="grid md:grid-cols-2 gap-5">
+
+               <div>
+    {errors.time && (
+        <p className="text-red-500 text-sm mb-1">
+            {errors.time}
+        </p>
+    )}
+
+    <select
+        name="time"
+        value={formData.time}
+        onChange={handleChange}
+        className={`w-full rounded-xl px-5 py-3 border ${
+            errors.time
+                ? "border-red-500"
+                : "border-gray-300"
+        }`}
+    >
+        <option value="">Select Time</option>
+        <option>09:00 AM</option>
+        <option>10:00 AM</option>
+        <option>11:00 AM</option>
+    </select>
+</div>
+
+              <div>
+    {errors.city && (
+        <p className="text-red-500 text-sm mb-1">
+            {errors.city}
+        </p>
+    )}
+
+    <input
+        type="text"
+        name="city"
+        value={formData.city}
+        onChange={handleChange}
+        placeholder="City"
+        className={`w-full rounded-xl px-5 py-3 border ${
+            errors.city
+                ? "border-red-500"
+                : "border-gray-300"
+        }`}
+    />
+</div>
+              </div>
+
+              {/* Message */}
+             <div>
+    {errors.message && (
+        <p className="text-red-500 text-sm mb-1">
+            {errors.message}
+        </p>
+    )}
+
+    <textarea
+        rows={4}
+        name="message"
+        value={formData.message}
+        onChange={handleChange}
+        placeholder="Tell us about your requirement..."
+        className={`w-full rounded-xl px-5 py-3 border ${
+            errors.message
+                ? "border-red-500"
+                : "border-gray-300"
+        }`}
+    />
+</div>
+              {/* Submit */}
+              <button
+                type="submit"
+                className="w-full py-4 rounded-xl bg-gradient-to-r from-[#293878] to-[#4967db] hover:from-[#1f2e6e] hover:to-[#3653c6] text-white font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]"
+              >
+                🚀 Book Free Consultation
+              </button>
+
+            </form>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+)}
+            
       <Footer />
     </>
   );
