@@ -294,7 +294,7 @@ const faqs = [
   <div className="max-w-7xl mx-auto px-6">
 
     {/* Heading */}
-    <div className="text-center mb-16">
+    <div className="text-center mb-10">
 
       <p className="text-[#d88912] font-bold text-xl mb-4">
         🚀 Our Most Popular Services
@@ -463,17 +463,17 @@ const faqs = [
       </div>
 
     </div>
-    <div className="flex justify-center mt-12">
+    <div className="flex justify-center mt-5">
   <Link
     href="/AllServices"
     className="bg-[#d88912] hover:bg-[#c17b0f] text-white px-10 py-4 rounded-full font-semibold text-lg transition duration-300 shadow-lg"
   >
-    All Services →
+    View All Services →
   </Link>
 </div>
   </div>
 {/* TRUSTED BRANDS SECTION */}
-<div className="max-w-7xl py-16 mx-auto px-4">
+<div className="max-w-7xl py-10 mx-auto px-4">
 
   <h2 className="text-center text-4xl font-bold text-black">
     Onlinebusiness.In Trusted By
