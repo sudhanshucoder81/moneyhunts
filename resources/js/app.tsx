@@ -42,6 +42,7 @@ layout: (name) => {
         case name === 'partnershipregistration':
         case name === 'ServiceUpgrade':
         case name === 'AllServices':
+        case name === 'Reviews':
             return null;
 
         // User Auth

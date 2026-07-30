@@ -30,6 +30,7 @@ Route::inertia('/DataRetentionPolicy', 'DataRetentionPolicy')->name('DataRetenti
 Route::inertia('/Sole-Proprietorship-Registration', 'Sole-Proprietorship-Registration')->name('Sole-Proprietorship-Registration');
 Route::inertia('/partnershipregistration', 'partnershipregistration')->name('partnershipregistration');
 Route::inertia('/AllServices', 'AllServices')->name('AllServices');
+Route::inertia('/Reviews', 'Reviews')->name('Reviews');
 Route::inertia('/refundpolicy', 'refundpolicy')->name('refundpolicy');
 Route::get('/ServiceUpgrade', [WebsiteController::class, 'serviceUpgrade'])
     ->name('ServiceUpgrade');
