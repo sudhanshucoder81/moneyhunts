@@ -41,6 +41,7 @@ layout: (name) => {
         case name === 'Sole-Proprietorship-Registration':
         case name === 'partnershipregistration':
         case name === 'ServiceUpgrade':
+        case name === 'AllServices':
             return null;
 
         // User Auth

@@ -29,6 +29,7 @@ Route::inertia('/disclaimerpolicy', 'disclaimerpolicy')->name('disclaimerpolicy'
 Route::inertia('/DataRetentionPolicy', 'DataRetentionPolicy')->name('DataRetentionPolicy');
 Route::inertia('/Sole-Proprietorship-Registration', 'Sole-Proprietorship-Registration')->name('Sole-Proprietorship-Registration');
 Route::inertia('/partnershipregistration', 'partnershipregistration')->name('partnershipregistration');
+Route::inertia('/AllServices', 'AllServices')->name('AllServices');
 Route::inertia('/refundpolicy', 'refundpolicy')->name('refundpolicy');
 Route::get('/ServiceUpgrade', [WebsiteController::class, 'serviceUpgrade'])
     ->name('ServiceUpgrade');
