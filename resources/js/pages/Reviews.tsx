@@ -868,6 +868,360 @@ export default function Reviews() {
         </div>
 
       </section>
+{/* ===========================
+      WHY CHOOSE US
+=========================== */}
+
+<section className="py-20 bg-white">
+
+<div className="max-w-7xl mx-auto px-6">
+
+<div className="grid lg:grid-cols-2 gap-12 items-center">
+
+<div>
+
+<img
+src="/images/aboutus.png"
+className="rounded-3xl shadow-2xl"
+/>
+
+</div>
+
+<div>
+
+<h2 className="text-4xl font-bold">
+Why Choose
+<span className="text-[#243B87]">
+ MoneyHunt?
+</span>
+</h2>
+
+<div className="space-y-6 mt-10">
+
+<div className="flex gap-5">
+
+<div className="text-4xl">✅</div>
+
+<div>
+
+<h3 className="font-bold text-xl">
+Experienced Professionals
+</h3>
+
+<p className="text-gray-600">
+CA, CS & Legal Experts with years of experience.
+</p>
+
+</div>
+
+</div>
+
+<div className="flex gap-5">
+
+<div className="text-4xl">⚡</div>
+
+<div>
+
+<h3 className="font-bold text-xl">
+Fast Processing
+</h3>
+
+<p className="text-gray-600">
+Quick turnaround with transparent workflow.
+</p>
+
+</div>
+
+</div>
+
+<div className="flex gap-5">
+
+<div className="text-4xl">🔒</div>
+
+<div>
+
+<h3 className="font-bold text-xl">
+Secure Documentation
+</h3>
+
+<p className="text-gray-600">
+Your data remains completely safe and confidential.
+</p>
+
+</div>
+
+</div>
+
+<div className="flex gap-5">
+
+<div className="text-4xl">💬</div>
+
+<div>
+
+<h3 className="font-bold text-xl">
+Dedicated Support
+</h3>
+
+<p className="text-gray-600">
+Support available before and after service completion.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+{/* ===========================
+      INDUSTRIES WE SERVE
+=========================== */}
+
+<section className="py-20 bg-gradient-to-b from-white to-gray-50">
+
+  <div className="max-w-7xl mx-auto px-6">
+
+    {/* Heading */}
+    <div className="text-center mb-16">
+
+      <span className="inline-block bg-yellow-100 text-[#d88912] px-5 py-2 rounded-full font-semibold">
+        ★ Industries We Serve
+      </span>
+
+      <h2 className="text-4xl md:text-5xl font-bold mt-5 text-[#243B87]">
+        Trusted Across Every Industry
+      </h2>
+
+      <div className="w-28 h-1 bg-[#d88912] mx-auto mt-5 rounded-full"></div>
+
+      <p className="mt-6 text-lg text-gray-600">
+        We help startups, SMEs and enterprises from every sector with
+        registration, taxation, compliance and legal services.
+      </p>
+
+    </div>
+
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+
+      {[
+        { icon: "🏥", title: "Healthcare" },
+        { icon: "🍴", title: "Restaurant" },
+        { icon: "💻", title: "IT Company" },
+        { icon: "🏭", title: "Manufacturing" },
+        { icon: "🛒", title: "Retail Business" },
+        { icon: "🏫", title: "Education" },
+        { icon: "🚚", title: "Logistics" },
+        { icon: "🏗", title: "Construction" },
+      ].map((item, index) => (
+
+        <div
+          key={index}
+          className="group bg-white rounded-3xl shadow-lg border border-gray-200 p-8 text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
+        >
+
+          <div className="w-20 h-20 rounded-full bg-[#243B87] text-white flex items-center justify-center text-4xl mx-auto group-hover:bg-[#d88912] transition">
+
+            {item.icon}
+
+          </div>
+
+          <h3 className="mt-6 text-xl font-bold text-[#243B87]">
+
+            {item.title}
+
+          </h3>
+
+          <p className="mt-3 text-gray-600 leading-7">
+
+            Business registration, GST, taxation and compliance services.
+
+          </p>
+
+        </div>
+
+      ))}
+
+    </div>
+
+  </div>
+
+</section>
+{/* ===========================
+      WHY BUSINESSES TRUST US
+=========================== */}
+
+<section className="py-20 bg-[#0f172a]">
+
+  <div className="max-w-7xl mx-auto px-6">
+
+    <div className="text-center mb-16">
+
+      <span className="inline-block px-5 py-2 rounded-full bg-yellow-500 text-black font-semibold">
+        ⭐ Trusted Nationwide
+      </span>
+
+      <h2 className="text-4xl md:text-5xl font-bold text-white mt-5">
+        Why 50,000+ Businesses Trust MoneyHunt
+      </h2>
+
+      <p className="text-gray-300 text-lg mt-6 max-w-3xl mx-auto">
+        We combine technology with experienced professionals to deliver
+        fast, transparent and reliable business compliance services.
+      </p>
+
+    </div>
+
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <div className="bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition">
+        <div className="text-5xl mb-5">⚡</div>
+        <h3 className="text-2xl font-bold text-white mb-4">
+          Fast Processing
+        </h3>
+        <p className="text-gray-300 leading-8">
+          Most registrations are initiated within 24 hours after document verification.
+        </p>
+      </div>
+
+      <div className="bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition">
+        <div className="text-5xl mb-5">👨‍💼</div>
+        <h3 className="text-2xl font-bold text-white mb-4">
+          Expert Professionals
+        </h3>
+        <p className="text-gray-300 leading-8">
+          Dedicated CA, CS and legal experts handle every application professionally.
+        </p>
+      </div>
+
+      <div className="bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition">
+        <div className="text-5xl mb-5">🔒</div>
+        <h3 className="text-2xl font-bold text-white mb-4">
+          Secure Data
+        </h3>
+        <p className="text-gray-300 leading-8">
+          Your personal and business information is protected with secure systems.
+        </p>
+      </div>
+
+      <div className="bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition">
+        <div className="text-5xl mb-5">💰</div>
+        <h3 className="text-2xl font-bold text-white mb-4">
+          Transparent Pricing
+        </h3>
+        <p className="text-gray-300 leading-8">
+          No hidden charges. Clear pricing before you place your order.
+        </p>
+      </div>
+
+      <div className="bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition">
+        <div className="text-5xl mb-5">📞</div>
+        <h3 className="text-2xl font-bold text-white mb-4">
+          Dedicated Support
+        </h3>
+        <p className="text-gray-300 leading-8">
+          Get support through phone, WhatsApp and email whenever you need help.
+        </p>
+      </div>
+
+      <div className="bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition">
+        <div className="text-5xl mb-5">🏆</div>
+        <h3 className="text-2xl font-bold text-white mb-4">
+          Trusted Brand
+        </h3>
+        <p className="text-gray-300 leading-8">
+          Thousands of startups and established businesses rely on MoneyHunt for compliance.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+<section className="py-20 bg-white">
+
+<div className="max-w-7xl mx-auto px-6">
+
+<div className="text-center mb-16">
+
+<span className="text-[#d88912] font-semibold">
+OUR PROCESS
+</span>
+
+<h2 className="text-5xl font-bold mt-4">
+Simple. Fast. Transparent.
+</h2>
+
+<p className="mt-6 text-gray-600">
+We complete every registration through a streamlined process.
+</p>
+
+</div>
+
+<div className="grid lg:grid-cols-5 gap-8">
+
+{[
+{
+no:"01",
+title:"Choose Service",
+icon:"📋"
+},
+{
+no:"02",
+title:"Upload Documents",
+icon:"📤"
+},
+{
+no:"03",
+title:"Expert Verification",
+icon:"👨‍💼"
+},
+{
+no:"04",
+title:"Government Filing",
+icon:"🏛"
+},
+{
+no:"05",
+title:"Certificate Delivered",
+icon:"🎉"
+}
+].map((item,index)=>(
+
+<div
+key={index}
+className="text-center relative"
+>
+
+<div className="w-24 h-24 rounded-full bg-[#243B87] text-white flex items-center justify-center text-5xl mx-auto">
+
+{item.icon}
+
+</div>
+
+<h3 className="font-bold text-2xl mt-6">
+{item.title}
+</h3>
+
+<p className="text-yellow-500 font-bold mt-3">
+STEP {item.no}
+</p>
+
+</div>
+
+))}
+
+</div>
+
+</div>
+
+</section>
 
       <Footer />
 
